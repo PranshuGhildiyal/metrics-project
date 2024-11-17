@@ -1,45 +1,3 @@
-```markdown
-# Fetch Metrics Demo
-
-This project demonstrates a basic architecture for collecting metrics from Kubernetes nodes using a **Node Exporter** DaemonSet and a custom **CronJob**. The collected metrics are stored in a PersistentVolume for later use. This setup is deployed on a **K3d cluster** and managed using **k9s** for visualization and debugging.  
-
-**Note:** This project is intended for **demo purposes only** and is **not suitable for production environments**.
-
----
-
-## **Overview**
-
-### **Architecture**
-1. **Node Exporter**: A DaemonSet deploys `prom/node-exporter` on all Kubernetes nodes to expose metrics at port `9100`.
-2. **CronJob**: Runs every 5 minutes to fetch metrics from the Node Exporter pods using the `fetch-metrics.sh` script. Metrics are stored in a PersistentVolume.
-3. **PersistentVolume**: A host-path-based volume (`metrics-pv`) is used to persist the metrics data.
-4. **RBAC**: A Role and RoleBinding ensure that the CronJob can interact with the Node Exporter service.
-5. **Namespace**: All resources are organized under the `monitoring` namespace for better management.
-6. **Cluster**: The setup is tested on a **K3d cluster**, a lightweight Kubernetes environment for local development.
-
----
-
-## **Project Structure**
-
-```plaintext
-/
-├── app/
-│   ├── Dockerfile         # Dockerfile for building the CronJob image
-│   ├── fetch-metrics.sh   # Script to fetch metrics from Node Exporter pods
-│
-└── manifest/
-    ├── namespace.yaml         # Namespace definition
-    ├── Role.yaml              # RBAC Role for accessing endpoints
-    ├── RoleBinding.yaml       # RoleBinding to bind the Role to a ServiceAccount
-    ├── metrics-pv.yaml        # PersistentVolume definition
-    ├── metrics-pvc.yaml       # PersistentVolumeClaim definition
-    ├── node-exporter.yaml     # DaemonSet for Node Exporter
-    ├── node-exporter-svc.yaml # Service exposing Node Exporter pods
-    ├── cronjob.yaml           # CronJob for fetching metrics
-```
-
----
-
 ## **Usage**
 
 ### **Prerequisites**
@@ -94,5 +52,21 @@ This project demonstrates a basic architecture for collecting metrics from Kuber
 This project is **intended for demo purposes only** and should not be used in a production environment. The PersistentVolume uses `hostPath`, which is not recommended for production-grade setups. Additionally, ensure proper security and monitoring configurations before using this in real-world scenarios.
 
 ---
+```
+/
+├── app/
+│   ├── Dockerfile         # Dockerfile for building the CronJob image
+│   ├── fetch-metrics.sh   # Script to fetch metrics from Node Exporter pods
+│
+└── manifest/
+    ├── namespace.yaml         # Namespace definition
+    ├── Role.yaml              # RBAC Role for accessing endpoints
+    ├── RoleBinding.yaml       # RoleBinding to bind the Role to a ServiceAccount
+    ├── metrics-pv.yaml        # PersistentVolume definition
+    ├── metrics-pvc.yaml       # PersistentVolumeClaim definition
+    ├── node-exporter.yaml     # DaemonSet for Node Exporter
+    ├── node-exporter-svc.yaml # Service exposing Node Exporter pods
+    ├── cronjob.yaml           # CronJob for fetching metrics
 
+---
 ```
