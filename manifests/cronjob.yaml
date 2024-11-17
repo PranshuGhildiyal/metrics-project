@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fetch-metrics
+  namespace: monitoring
+spec:
+  # Schedule the CronJob to run every 5 minutes
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fetch-metrics
+            image: pranshughildiyal123/fetch-metrics:latest  # Uploaded to dockerhub
+            volumeMounts:
+            - name: metrics-volume
+              mountPath: /metrics  # Mounting the volume to store metrics
+          restartPolicy: OnFailure
+          volumes:
+          - name: metrics-volume
+            persistentVolumeClaim:
+              claimName: metrics-pvc # PVC to store the data
