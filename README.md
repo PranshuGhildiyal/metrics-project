@@ -3,7 +3,7 @@
 
 ---
 
-## **Overview**:
+## **Overview**
 
 1. **Kubernetes Cluster Setup**:
    - A **K3d cluster** is created as the local Kubernetes environment for testing and deployment.
